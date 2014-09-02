@@ -26,7 +26,7 @@ gtests = ["src/glsl/tests/general-ir-test",
           "src/mesa/main/tests/main-test",
           "src/mesa/drivers/dri/i965/test_vec4_copy_propagation",
           "src/mesa/drivers/dri/i965/test_vec4_register_coalesce",
-          "./src/mapi/shared-glapi-test"]
+          "./src/mapi/shared-glapi/tests/shared-glapi-test"]
 
 builder.AddGtests(gtests)
 
