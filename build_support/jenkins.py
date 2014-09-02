@@ -149,6 +149,9 @@ class Jenkins:
         label = o.hardware
         p.append("label=" + label)
 
+        # this branch has a old test spec
+        p.append("build_support_branch=origin/mesa_10.2")
+
         return "&".join(p)
 
     def print_builds(self):
