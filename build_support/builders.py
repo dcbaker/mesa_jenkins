@@ -285,6 +285,10 @@ class PiglitTester(object):
 
                 # In the event of a piglit related bug, we want the backtrace
                 "PIGLIT_DEBUG": "1",
+
+                # Set the patth to include buildroot/bin so fast skipping works
+                'PATH': '{}:{}'.format(os.path.join(self.build_root, 'bin'),
+                                       os.environ['PATH']),
         }
 
     def test(self):
