@@ -1,12 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
-import git
 import hashlib
 import os
 import signal
 import subprocess
 import sys
 import time
+
+import git
 
 sys.path.append("/var/lib/git/mesa_jenkins/services/")
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), ".."))
