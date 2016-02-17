@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 
+from __future__ import print_function
 import hashlib
 import os
 import signal
@@ -43,7 +44,7 @@ def robust_clone(url, directory):
                                   url, directory])
             success = True
         except(subprocess.CalledProcessError):
-            print "Error: could not clone " + url
+            print("Error: could not clone " + url, file=sys.stderr)
             time.sleep(10)
 
 
@@ -55,7 +56,7 @@ def robust_update():
             _repo.remotes.origin.pull()
             _success = True
         except:
-            print "Error: could not update buildsupport"
+            print("Error: could not update buildsupport", file=sys.stderr)
             time.sleep(10)
             
 
@@ -92,7 +93,7 @@ def main():
     while True:
         orig_spec_hash = file_checksum(spec_file)
         if new_spec_hash is not None:
-            print "Build Specification updated"
+            print("Build Specification updated")
         new_spec_hash = file_checksum(spec_file)
 
         while new_spec_hash == orig_spec_hash:
@@ -125,13 +126,13 @@ def main():
                     repo.git.fetch()
                     signal.alarm(0)
                 except git.GitCommandError as e:
-                    print "error fetching, ignoring: " + str(e)
+                    print("error fetching, ignoring: " + str(e), file=sys.stderr)
                     signal.alarm(0)
                 except AssertionError as e:
-                    print "assertion while fetching: " + str(e)
+                    print("assertion while fetching: " + str(e), file=sys.stderr)
                     signal.alarm(0)
                 except TimeoutException as e:
-                    print str(e)
+                    print (str(e), file=sys.stderr)
                     signal.alarm(0)
             # pause a bit before fetching the next round
             time.sleep(20)
