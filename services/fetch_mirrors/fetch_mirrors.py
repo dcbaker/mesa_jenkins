@@ -27,8 +27,10 @@ class TimeoutException(Exception):
     def __str__(self):
         return self._msg
 
+
 def signal_handler(signum, frame):
     raise TimeoutException("Fetch timed out.")
+
 
 def signal_handler_quit(signum, frame):
     sys.exit(-1)
