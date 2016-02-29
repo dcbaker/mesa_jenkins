@@ -485,9 +485,8 @@ def ping(system):
                          stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode:
-        print(out)
-        print(err)
-        sys.stdout.flush()
+        print(out, file=sys.stderr, flush=True)
+        print(err, file=sys.stderr, flush=True)
     return p.returncode == 0
 
 
@@ -506,8 +505,7 @@ def main():
 
     def reboot(system):
         if not systems.has_key(system):
-            print ("invalid system: " + system)
-            sys.stdout.flush()
+            print ("invalid system: " + system, file=sys.stderr, flush=True)
         address = systems[system]
         switches[address["switch"]][address["outlet"]-1].state = "OFF"
         time.sleep(10)
@@ -517,16 +515,15 @@ def main():
         if hangs:
             for system in hangs:
                 if not ping(system):
-                    print("rebooting system: " + system)
-                    sys.stdout.flush()
+                    print("rebooting system: " + system,
+                          file=sys.stderr, flush=True)
                     reboot(system)
             hangs = []
             time.sleep(360)
 
         for system in systems.iterkeys():
             if not ping(system):
-                print("failed ping: " + system)
-                sys.stdout.flush()
+                print("failed ping: " + system, file=sys.stderr, flush=True)
                 hangs.append(system)
 
         time.sleep(120)
