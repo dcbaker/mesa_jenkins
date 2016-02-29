@@ -1,0 +1,10 @@
+[Unit]
+Description=Control managed switches to reboot hung systems
+
+[Service]
+Type=simple
+ExecStart=/var/lib/git/mesa_jenkins/services/reboot_hung_systems/reboot_hung_systems.py
+Restart=on-failure
+
+[Install]
+WantedBy=jenkins.service
