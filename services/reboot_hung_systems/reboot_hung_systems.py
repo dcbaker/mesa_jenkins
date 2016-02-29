@@ -492,30 +492,15 @@ def ping(system):
 
 
 def main():
-    systems = {"otc-gfxtest-bsw-01.local" : { "switch":1, "outlet":1 },
-               "otc-gfxtest-bsw-02.local" : { "switch":1, "outlet":2 },
-               "otc-gfxtest-bsw-03.local" : { "switch":1, "outlet":3 },
-               "otc-gfxtest-bsw-04.local" : { "switch":1, "outlet":4 },
-               "otc-gfxtest-bsw-05.local" : { "switch":1, "outlet":5 },
-               "otc-gfxtest-bsw-06.local" : { "switch":1, "outlet":6 },
-               # "otc-gfxtest-bsw-07.local" : { "switch":1, "outlet":7 },
-               # "otc-gfxtest-sklgt2-01.local" : { "switch":1, "outlet":8},
-               # byt does not boot after power loss
-               # "otc-gfxtest-byt-01.local" : { "switch":2, "outlet":1 },
-               # "otc-gfxtest-byt-02.local" : { "switch":2, "outlet":2 },
-               # "otc-gfxtest-byt-03.local" : { "switch":2, "outlet":3 },
-               # "otc-gfxtest-byt-04.local" : { "switch":2, "outlet":4 },
-               "otc-gfxtest-kbl-01.local" : { "switch":2, "outlet":5 },
-               "otc-gfxtest-bxt-02.local" : { "switch":2, "outlet":6 },
-               "otc-gfxtest-bxt-01.local" : { "switch":2, "outlet":7 },
-               "otc-gfxtest-sklgt2-02.local" : { "switch":2, "outlet":8}}
+    # Load the config file, read all of the configuration data in and then
+    # delete the reference to the conf file, it won't be needed again.
+    with open("/var/lib/git/mesa_jenkins/services/reboot_hung_systems/config.json", 'r') as f:
+        conf = json.load(f)
 
-    switches = {1: PowerSwitch(hostname="192.168.1.2",
-                               userid="admin",
-                               password="1234"),
-                2: PowerSwitch(hostname="192.168.1.3",
-                               userid="admin",
-                               password="1234")}
+    systems = conf['systems']
+    switches = {k: PowerSwitch(**v) for k, v in conf['switches'].iteritems()}
+
+    del conf
 
     hangs = []
 
