@@ -35,6 +35,7 @@ from __future__ import print_function
 
 __copyright__ = """
 Copyright (c) 2009-2014, Dwight Hubbard
+Copyright (c) 2016 Intel Corporation
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -475,94 +476,76 @@ class PowerSwitch(object):
 
 sys.path.append("/var/lib/git/mesa_jenkins/services/")
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), ".."))
-from daemon import Daemon
 import subprocess
 
-class HangReboot(Daemon):
-    def __init__(self, pidfile, stdin='/dev/null',
-                 stdout='/dev/null', stderr='/dev/null'):
-        Daemon.__init__(self, pidfile, stdin, stdout, stderr)
-        self.systems = {"otc-gfxtest-bsw-01.local" : { "switch":1, "outlet":1 },
-                        "otc-gfxtest-bsw-02.local" : { "switch":1, "outlet":2 },
-                        "otc-gfxtest-bsw-03.local" : { "switch":1, "outlet":3 },
-                        "otc-gfxtest-bsw-04.local" : { "switch":1, "outlet":4 },
-                        "otc-gfxtest-bsw-05.local" : { "switch":1, "outlet":5 },
-                        "otc-gfxtest-bsw-06.local" : { "switch":1, "outlet":6 },
-                        # "otc-gfxtest-bsw-07.local" : { "switch":1, "outlet":7 },
-                        # "otc-gfxtest-sklgt2-01.local" : { "switch":1, "outlet":8},
-                        # byt does not boot after power loss
-                        # "otc-gfxtest-byt-01.local" : { "switch":2, "outlet":1 },
-                        # "otc-gfxtest-byt-02.local" : { "switch":2, "outlet":2 },
-                        # "otc-gfxtest-byt-03.local" : { "switch":2, "outlet":3 },
-                        # "otc-gfxtest-byt-04.local" : { "switch":2, "outlet":4 },
-                        "otc-gfxtest-kbl-01.local" : { "switch":2, "outlet":5 },
-                        "otc-gfxtest-bxt-02.local" : { "switch":2, "outlet":6 },
-                        "otc-gfxtest-bxt-01.local" : { "switch":2, "outlet":7 },
-                        "otc-gfxtest-sklgt2-02.local" : { "switch":2, "outlet":8}}
 
-        self.switches = { 1 : PowerSwitch(hostname="192.168.1.2",
-                                          userid="admin",
-                                          password="1234"),
-                          2:  PowerSwitch(hostname="192.168.1.3",
-                                          userid="admin",
-                                          password="1234") }
+def ping(system):
+    p = subprocess.Popen(["ping", "-c", "4", system],
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    if p.returncode:
+        print(out)
+        print(err)
+        sys.stdout.flush()
+    return p.returncode == 0
 
-        self.hangs = []
 
-    def ping(self, system):
-        p = subprocess.Popen(["ping", "-c", "4", system],
-                                stdout = subprocess.PIPE,
-                                stderr = subprocess.PIPE)
-        out, err = p.communicate()
-        if p.returncode:
-            print (out)
-            print (err)
-            sys.stdout.flush()
-        return p.returncode == 0
+def main():
+    systems = {"otc-gfxtest-bsw-01.local" : { "switch":1, "outlet":1 },
+               "otc-gfxtest-bsw-02.local" : { "switch":1, "outlet":2 },
+               "otc-gfxtest-bsw-03.local" : { "switch":1, "outlet":3 },
+               "otc-gfxtest-bsw-04.local" : { "switch":1, "outlet":4 },
+               "otc-gfxtest-bsw-05.local" : { "switch":1, "outlet":5 },
+               "otc-gfxtest-bsw-06.local" : { "switch":1, "outlet":6 },
+               # "otc-gfxtest-bsw-07.local" : { "switch":1, "outlet":7 },
+               # "otc-gfxtest-sklgt2-01.local" : { "switch":1, "outlet":8},
+               # byt does not boot after power loss
+               # "otc-gfxtest-byt-01.local" : { "switch":2, "outlet":1 },
+               # "otc-gfxtest-byt-02.local" : { "switch":2, "outlet":2 },
+               # "otc-gfxtest-byt-03.local" : { "switch":2, "outlet":3 },
+               # "otc-gfxtest-byt-04.local" : { "switch":2, "outlet":4 },
+               "otc-gfxtest-kbl-01.local" : { "switch":2, "outlet":5 },
+               "otc-gfxtest-bxt-02.local" : { "switch":2, "outlet":6 },
+               "otc-gfxtest-bxt-01.local" : { "switch":2, "outlet":7 },
+               "otc-gfxtest-sklgt2-02.local" : { "switch":2, "outlet":8}}
 
-    def reboot(self, system):
-        if not self.systems.has_key(system):
+    switches = {1: PowerSwitch(hostname="192.168.1.2",
+                               userid="admin",
+                               password="1234"),
+                2: PowerSwitch(hostname="192.168.1.3",
+                               userid="admin",
+                               password="1234")}
+
+    hangs = []
+
+    def reboot(system):
+        if not systems.has_key(system):
             print ("invalid system: " + system)
             sys.stdout.flush()
-        address = self.systems[system]
-        self.switches[address["switch"]][address["outlet"]-1].state = "OFF"
+        address = systems[system]
+        switches[address["switch"]][address["outlet"]-1].state = "OFF"
         time.sleep(10)
-        self.switches[address["switch"]][address["outlet"]-1].state = "ON"
+        switches[address["switch"]][address["outlet"]-1].state = "ON"
 
-    def run(self):
-        while True:
-            if self.hangs:
-                for system in self.hangs:
-                    if not self.ping(system):
-                        print("rebooting system: " + system)
-                        sys.stdout.flush()
-                        self.reboot(system)
-                self.hangs = []
-                time.sleep(360)
-
-            for system in self.systems.keys():
-                if not self.ping(system):
-                    print("failed ping: " + system)
+    while True:
+        if hangs:
+            for system in hangs:
+                if not ping(system):
+                    print("rebooting system: " + system)
                     sys.stdout.flush()
-                    self.hangs.append(system)
+                    reboot(system)
+            hangs = []
+            time.sleep(360)
 
-            time.sleep(120)
+        for system in systems.iterkeys():
+            if not ping(system):
+                print("failed ping: " + system)
+                sys.stdout.flush()
+                hangs.append(system)
+
+        time.sleep(120)
+
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        daemon = HangReboot('/var/run/reboot_hung_systems.pid',
-                            stdout='/var/log/reboot_hung_systems.out.log',
-                            stderr='/var/log/reboot_hung_systems.out.log')
-        if 'start' == sys.argv[1]:
-            daemon.start()
-        elif 'stop' == sys.argv[1]:
-            daemon.stop()
-        elif 'restart' == sys.argv[1]:
-            daemon.restart()
-        else:
-            print ("Unknown command")
-            sys.exit(2)
-        sys.exit(0)
-    else:
-        print ("usage: %s start|stop|restart" % sys.argv[0])
-        sys.exit(2)
+    main()
