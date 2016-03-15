@@ -237,7 +237,6 @@
       <remote name="chadv" repo="git://github.com/chadversary/piglit"/>
       <remote name="idr" repo="git://people.freedesktop.org/~idr/piglit"/>
       <remote name="bpeel" repo="git://github.com/bpeel/piglit"/>
-      <remote name="piglitvulkan" repo="ssh://git@gitlab.khronos.org/jekstrand/piglit.git"/>
     </piglit>
 
     <waffle repo="git://github.com/waffle-gl/waffle">
@@ -319,7 +318,7 @@
     <branch name="vulkancts" project="vulkancts-full">
       <mesa branch="origin/vulkan"/>
       <vulkancts branch="khronos/vulkan-cts-1.0"/>
-      <piglit branch="piglitvulkan/vulkan"/>
+      <piglit>
       <crucible/>
       <shaderc/>
       <glslang/>
@@ -327,7 +326,7 @@
 
     <branch name="bwidawsk_vulkan" project="vulkancts-full">
       <mesa branch="vulkan/bwidawsk"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
@@ -337,25 +336,25 @@
 
     <branch name="jekstrand_vulkan" project="vulkancts-full">
       <mesa branch="jekstrand/jenkins_vulkan"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
     <branch name="jljusten_vulkan" project="vulkancts-full">
       <mesa branch="jljusten/vulkan"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
     <branch name="chadv_vulkan" project="vulkancts-full">
       <mesa branch="chadv/jenkins_vulkan"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
     <branch name="krh_vulkan" project="vulkancts-full">
       <mesa branch="krh/jenkins_vulkan"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
@@ -365,7 +364,7 @@
 
     <branch name="kwg_vulkan" project="vulkancts-full">
       <mesa branch="kwg/vkjenkins"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
@@ -434,7 +433,7 @@
 
     <branch name="nchery_vulkan" project="vulkancts-full">
       <mesa branch="nchery/jenkins_vulkan"/>
-      <piglit branch="piglitvulkan/vulkan" trigger="false"/>
+      <piglit trigger="false"/>
       <vulkancts branch="khronos/vulkan-cts-1.0" trigger="false"/>
     </branch>
 
