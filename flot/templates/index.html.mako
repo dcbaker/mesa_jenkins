@@ -33,7 +33,7 @@
     <!-- The "all" page -->
     <p><a href="${url_for('all')}">all</a></p>
 
-% for benchmark in benchmarks:
+% for benchmark, _ in benchmarks:
   <p><a href="${url_for('apps', benchmark=benchmark)}">${benchmark}</a></p>
 % endfor
 

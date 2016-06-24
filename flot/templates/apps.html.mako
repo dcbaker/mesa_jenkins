@@ -40,7 +40,7 @@
             success: function( data ) {
                 // debugger;
                 var d = JSON.parse(data);
-% for benchmark in benchmarks:
+% for benchmark, _ in benchmarks:
                 do_plot("${benchmark}", "#${benchmark}", "#click_${benchmark}", d);
 % endfor
             }
@@ -58,7 +58,7 @@
 
     <div id="content">
 
-% for benchmark in benchmarks:
+% for benchmark, _ in benchmarks:
 	  <h2>${benchmark}</h2>
 	  <div class="demo-container">
 	    <div id="${benchmark}" class="demo-placeholder"></div>
