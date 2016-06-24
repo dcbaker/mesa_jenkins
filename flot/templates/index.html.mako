@@ -24,21 +24,40 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Mesa Performance: Continuous Integration</title>
+    <link rel="stylesheet" href="${url_for('static', filename='index.css')}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="${url_for('static', filename='scripts/jquery.collapse.js')}"></script>
   </head>
   <body>
     <div id="header">
       <h2>Mesa Performance</h2>
     </div>
 
-    <!-- The "all" page -->
-    <p><a href="${url_for('all')}">all</a></p>
-
-% for benchmark, _ in benchmarks:
-  <p><a href="${url_for('apps', benchmark=benchmark)}">${benchmark}</a></p>
+    <div data-collapse>
+      <h3>All Benchmarks</h3>
+      <div>
+        <ul>
+          <li><a href="${url_for('all')}">One Big Page</a></li>
+% for b in sorted(getter.by_name.keys()):
+          <li><a href="${url_for('apps', benchmark=b)}">${b}</a></li>
 % endfor
+        <ul>
+      </div>
+% for c in sorted(getter.by_category.keys()):
+      <h3>Category: ${c}</h3>
+      <div>
+        <ul>
+          <li><a href="${url_for('categories', category=c)}">One Big Page</a></li>
+  % for b in sorted(getter.by_category[c]):
+          <li><a href="${url_for('apps', benchmark=b)}">${b}</a></li>
+  % endfor
+        <ul>
+      </div>
+% endfor
+    </div>
 
     <div id="footer">
-      Copyright &copy; 2016 Intel Corporation;
+      Copyright &copy; 2016 Intel Corporation
     </div>
   </body>
 </html>

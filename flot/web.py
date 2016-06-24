@@ -104,8 +104,8 @@ class _Getter(object):
     """
     def __init__(self):
         self.by_name = dict(iter(_BENCHMARKS))
-        self.by_category = {c: list(b) for c, b in
-                            itertools.groupby(_BENCHMARKS, lambda x: x)}
+        self.by_category = {c: [n[0] for n in b] for c, b in itertools.groupby(
+            sorted(_BENCHMARKS, key=lambda x: x[1]), lambda x: x[1])}
 
 
 GETTER = _Getter()
@@ -113,7 +113,7 @@ GETTER = _Getter()
 
 @APP.route('/')
 def front():
-    return render_template('index.html.mako', benchmarks=_BENCHMARKS)
+    return render_template('index.html.mako', getter=GETTER)
 
 
 @APP.route('/apps/all')
@@ -126,7 +126,7 @@ def all():  # pylint: disable=redefined-builtin
 def apps(benchmark):
     return render_template(
         'apps.html.mako',
-        benchmarks=GETTER.by_name[benchmark],
+        benchmarks=[benchmark],
         category=None)
 
 
