@@ -21,6 +21,9 @@
 # SOFTWARE.
 
 """Flask webpage for performance data."""
+
+import itertools
+
 # pylint: disable=import-error
 import flask
 from flask_mako import MakoTemplates, render_template
@@ -92,6 +95,22 @@ _BENCHMARKS = [
 # pylint: enable=bad-whitespace
 
 
+class _Getter(object):
+    """A container for making working with benchmark data easier.
+
+    Stores dictionaries relating each element to each other, allowing for fast
+    searches.
+
+    """
+    def __init__(self):
+        self.by_name = dict(iter(_BENCHMARKS))
+        self.by_category = {c: list(b) for c, b in
+                            itertools.groupby(_BENCHMARKS, lambda x: x)}
+
+
+GETTER = _Getter()
+
+
 @APP.route('/')
 def front():
     return render_template('index.html.mako', benchmarks=_BENCHMARKS)
@@ -99,12 +118,24 @@ def front():
 
 @APP.route('/apps/all')
 def all():  # pylint: disable=redefined-builtin
-    return render_template('apps.html.mako', benchmarks=_BENCHMARKS)
+    return render_template('apps.html.mako', benchmarks=_BENCHMARKS,
+                           category="All Benchmarks")
 
 
 @APP.route('/apps/<benchmark>')
 def apps(benchmark):
-    return render_template('apps.html.mako', benchmarks=[benchmark])
+    return render_template(
+        'apps.html.mako',
+        benchmarks=GETTER.by_name[benchmark],
+        category=None)
+
+
+@APP.route('/categories/<category>')
+def categories(category):
+    return render_template(
+        'apps.html.mako',
+        benchmarks=GETTER.by_category[category],
+        category=category)
 
 
 if __name__ == '__main__':

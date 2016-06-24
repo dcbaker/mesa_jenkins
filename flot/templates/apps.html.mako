@@ -40,7 +40,7 @@
             success: function( data ) {
                 // debugger;
                 var d = JSON.parse(data);
-% for benchmark, _ in benchmarks:
+% for benchmark in benchmarks:
                 do_plot("${benchmark}", "#${benchmark}", "#click_${benchmark}", d);
 % endfor
             }
@@ -53,12 +53,16 @@
   <body>
 
     <div id="header">
-	  <h2>Mesa Performance</h2>
+% if not category:
+    <h2>Mesa Performance</h2>
+% else:
+    <h2>Mesa Performance: ${category}</h2>
+% endif
     </div>
 
     <div id="content">
 
-% for benchmark, _ in benchmarks:
+% for benchmark in benchmarks:
 	  <h2>${benchmark}</h2>
 	  <div class="demo-container">
 	    <div id="${benchmark}" class="demo-placeholder"></div>
