@@ -423,6 +423,7 @@ class PiglitTester(object):
                "-p", "gbm",
                "-b", "junit",
                "--junit_suffix", "." + suffix + o.arch,
+               "--log-level", "quiet",
 
                # intermittently fails snb?
                "--exclude-tests", "timestamp-get",

@@ -126,6 +126,7 @@ class CtsBuilder:
                "--config", conf_file,
                "-c",
                "--exclude-tests", "esext-cts",
+               "--log-level", "quiet",
                "--junit_suffix", "." + o.hardware + o.arch] + \
                exclude_tests + \
                include_tests + suite_names + [out_dir]
