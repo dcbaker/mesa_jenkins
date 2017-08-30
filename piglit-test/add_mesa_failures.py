@@ -10,7 +10,7 @@ import sys
 import time
 
 current_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-sys.path.append(current_dir + "/..")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "repos", "mesa_ci"))
 import build_support as bs
 
 parser = argparse.ArgumentParser(description="bisects all mesa failures")

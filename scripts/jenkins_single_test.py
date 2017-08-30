@@ -1,5 +1,5 @@
 import os, time, sys, shutil, hashlib, argparse, shutil
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), ".."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "repos", "mesa_ci"))
 import build_support as bs
 
 def collate_tests(result_path, out_test_dir):

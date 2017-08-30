@@ -8,7 +8,7 @@ import sys
 import time
 import xml.sax.saxutils as saxutils
 
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), ".."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "repos", "mesa_ci")))
 import build_support as bs
 
 # needed to preserve case in the options

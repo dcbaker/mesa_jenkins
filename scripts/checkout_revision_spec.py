@@ -3,7 +3,7 @@
 import argparse
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "repos", "mesa_ci"))
 import build_support as bs
 
 parser = argparse.ArgumentParser(description="checks out branches and commits")

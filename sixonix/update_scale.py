@@ -5,7 +5,7 @@ import sys
 import glob
 import numpy
 import os.path as path
-sys.path.append(path.join(path.dirname(path.abspath(sys.argv[0])), ".."))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "repos", "mesa_ci"))
 import build_support as bs
 
 
