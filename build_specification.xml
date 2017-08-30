@@ -445,6 +445,7 @@
 
     <!-- just so the master can cache it for the builders -->
     <mesa_jenkins repo="git://github.com/janesma/mesa_jenkins.git"/>
+    <mesa_ci repo="git://github.com/janesma/mesa_ci.git"/>
 
     <deqp repo="git://github.com/janesma/deqp.git"
           branch="aosp/master">
