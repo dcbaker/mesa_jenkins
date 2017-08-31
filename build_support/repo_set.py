@@ -330,9 +330,14 @@ class RepoSet:
         return revs
 
 class RevisionSpecification:
-    def __init__(self, from_string=None, from_cmd_line=None):
+    def __init__(self, from_string=None, from_cmd_line=None, revisions=None):
         # key is project, value is revision
-        self._revisions = {}
+        if revisions is None:
+            self._revisions = {}
+        else:
+            assert isinstance(revisions, dict)
+            self._revsisions  = revisions
+            return
 
         if from_string is not None:
             self.from_string(from_string)
@@ -351,6 +356,12 @@ class RevisionSpecification:
             except:
                 continue
             self._revisions[p] = rev
+
+    @classmethod
+    def from_xml_file(cls, filename):
+        elem = et.ElementTree(file=filename).getroot()
+        inst = cls(revisions=elem.find('RevSpec').attrib)
+        return inst
 
     def from_string(self, spec):
         if type(spec) == str or type(spec) == unicode:
