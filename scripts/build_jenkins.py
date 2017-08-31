@@ -239,6 +239,9 @@ def main():
         branchspec = bspec.branch_specification(branch)
         projects = [branchspec.project]
 
+    # Add a revisions.xml file
+    revspec.to_elementtree().write(os.path.join(result_path, 'revisions.xml'))
+
     # use a global, so signal handler can abort builds when scheduler
     # is interrupted
     global jen
