@@ -330,28 +330,22 @@ class RepoSet:
         return revs
 
 class RevisionSpecification:
-    def __init__(self, from_cmd_line=None, revisions=None):
+    def __init__(self, revisions=None):
         # key is project, value is revision
-        if revisions is None:
-            self._revisions = {}
-        else:
+        if revisions is not None:
             assert isinstance(revisions, dict)
             self._revsisions  = revisions
-            return
-
-        if from_cmd_line is not None:
-            self.from_cmd_line_param(from_cmd_line)
-            return
-
-        repo_set = RepoSet()
-        projects = repo_set.projects()
-        for p in projects:
-            try:
-                repo = repo_set.repo(p)
-                rev = repo.git.rev_parse("HEAD", short=True)
-            except:
-                continue
-            self._revisions[p] = rev
+        else:
+            self._revisions = {}
+            repo_set = RepoSet()
+            projects = repo_set.projects()
+            for p in projects:
+                try:
+                    repo = repo_set.repo(p)
+                    rev = repo.git.rev_parse("HEAD", short=True)
+                except:
+                    continue
+                self._revisions[p] = rev
 
     @classmethod
     def from_xml_file(cls, filename):
@@ -359,8 +353,9 @@ class RevisionSpecification:
         inst = cls(revisions=elem.find('RevSpec').attrib)
         return inst
 
-    def from_cmd_line_param(self, params):
-        self._revisions = dict(p.split('=') for p in params)
+    @classmethod
+    def from_cmd_line_param(cls, params):
+        return cls(revisions=dict(p.split('=') for p in params))
 
     def to_cmd_line_param(self):
         revs = []
@@ -468,7 +463,7 @@ class BuildSpecification:
             self._branch_specs[branch_name].checkout()
         else:
             print "WARN: branch not found, ignoring: " + branch_name
-        rs = RevisionSpecification(from_cmd_line = commits)
+        rs = RevisionSpecification.from_cmd_line(commits)
         rs.checkout()
 
 class ProjectInvoke:
