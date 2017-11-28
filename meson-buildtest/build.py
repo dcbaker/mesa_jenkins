@@ -16,7 +16,7 @@ def main():
         '-Dgallium-drivers=r300,r600,radeonsi,nouveau,swrast,freedreno,vc4,pl111,etnaviv,imx,svga,virgl',
     ]
     if global_opts.config != 'debug':
-        options.append('-Dbuildtype=release')
+        options.extend(['-Dbuildtype=release', '-Db_ndebug=true'])
     b = bs.builders.MesonBuilder(extra_definitions=options, install=False)
 
     try:
