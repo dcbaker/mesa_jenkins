@@ -70,6 +70,15 @@ rm /etc/network/interfaces
 mkdir -p /boot/efi/EFI/boot/
 cp /boot/efi/EFI/debian/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
 
+# Salt is not in testing ATM, only sid and stable, so install it from sid
+mkdir -p /etc/apt/sources.list.d/ || true
+cat > /etc/apt/sources.list.d/unstable.list << EOF
+deb http://linux-ftp.jf.intel.com/pub/mirrors/debian/ unstable main
+deb-src http://linux-ftp.jf.intel.com/pub/mirrors/debian/ unstable main
+EOF
+apt update
+apt install -t unstable salt-minion
+
 # Enable and disable some services
 systemctl enable systemd-networkd systemd-resolved avahi-daemon salt-minion
 systemctl disable networking
