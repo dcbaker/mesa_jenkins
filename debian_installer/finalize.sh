@@ -34,6 +34,11 @@ master_finger: ba:42:e5:d8:e6:3f:ec:ff:a4:7b:c3:cd:24:74:2a:8b
 hash_type: md5
 EOF
 
+# Options for roles are
+# conformance : jenkins test nodes (deqp, piglit, cts, etc)
+# performance : jenkins performance testing (trex, etc)
+# builder     : jenkins build node
+# jenkins     : Jenkins server
 cat > /etc/salt/minion.d/grain.conf << EOF
 grains:
   roles:
