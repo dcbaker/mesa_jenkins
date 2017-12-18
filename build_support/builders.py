@@ -83,15 +83,19 @@ def cpu_count():
     return cpus
 
 
+def is_debian():
+    return os.path.exists('/etc/debian_version')
+
+
 def _system_dirs():
     """Returns the correct lib prefix for debian vs non-debian."""
     lib_dirs = ['lib']
     if Options().arch == "m32":
-        if os.path.exists('/etc/debian_version'):
+        if is_debian():
             lib_dirs.append("lib/i386-linux-gnu")
     else:
         lib_dirs.append("lib64")
-        if os.path.exists('/etc/debian_version'):
+        if is_debian():
             lib_dirs.append("lib/x86_64-linux-gnu")
     return lib_dirs
 
@@ -331,6 +335,13 @@ class CMakeBuilder(object):
         if not os.path.exists(self._build_dir):
             os.makedirs(self._build_dir)
 
+        debian_opts = []
+        if is_debian():
+            if self._options.arch == "m32":
+                debian_opts.append('-DCMAKE_LIBRARY_ARCHITECTURE=i386-linux-gnu')
+            else:
+                debian_opts.append('-DCMAKE_LIBRARY_ARCHITECTURE=x86_64-linux-gnu')
+
         pkg_config = get_package_config_path()
         savedir = os.getcwd()
         os.chdir(self._build_dir)
@@ -350,7 +361,8 @@ class CMakeBuilder(object):
         self._options.update_env(env)
         run_batch_command(["cmake", "-GNinja", self._src_dir, 
                            "-DCMAKE_INSTALL_PREFIX:PATH=" + self._build_root] \
-                          + self._extra_definitions, env=env)
+                          + self._extra_definitions + debian_opts,
+                          env=env)
 
         run_batch_command(["ninja", "-j" + str(cpu_count())], env=env)
         if self._install:
