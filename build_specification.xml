@@ -83,7 +83,7 @@
     </project>
 
     <project name="glcts-test"
-             bisect_hardware="snb,ivb,byt,hsw,bdw,skl,bsw,bxt,kbl,glk,cfl"
+             bisect_hardware="snb,ivb,byt,hsw,bdw,skl,bsw,bxt,kbl,glk,cfl,cnl"
              bisect_arch="m64,m32">
       <prerequisite name="glcts" hardware="builder"/>
       <prerequisite name="mesa" hardware="builder"/>
@@ -273,7 +273,7 @@
       <prerequisite name="glcts-test" only_for_type="daily" hardware="hsw,bdw,skl,kbl" arch="m32"/>
       <prerequisite name="glcts-test" only_for_type="daily" hardware="bsw,bxt" shard="4"/>
       <prerequisite name="glcts-test" only_for_type="daily" hardware="byt"/>
-      <prerequisite name="glcts-test" only_for_type="daily" hardware="glk,cfl"/>
+      <prerequisite name="glcts-test" only_for_type="daily" hardware="glk,cfl,cnl"/>
     </project>
 
     <project name="vulkan-and-gl">
