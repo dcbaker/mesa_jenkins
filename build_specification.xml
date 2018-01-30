@@ -117,7 +117,7 @@
     </project>
 
     <project name="piglit-test"
-             bisect_hardware="bdw,skl,hsw,ivb,snb,bsw,byt,g965,ilk,g33,g45,bxt,kbl,glk,cfl"
+             bisect_hardware="bdw,skl,hsw,ivb,snb,bsw,byt,g965,ilk,g33,g45,bxt,kbl,glk,cfl,cnl"
              bisect_arch="m64,m32">
       <prerequisite name="piglit" hardware="builder"/>
       <prerequisite name="mesa" hardware="builder"/>
@@ -147,7 +147,7 @@
                     arch="m32"/>
       <prerequisite only_for_type="daily" name="piglit-test" hardware="ilk,bsw,byt,g33,g45,g965" arch="m64,m32"/>
       <!-- do not test 32 bit for limited platforms -->
-      <prerequisite only_for_type="daily" name="piglit-test" hardware="bxt,glk,cfl" arch="m64"/>
+      <prerequisite only_for_type="daily" name="piglit-test" hardware="bxt,glk,cfl,cnl" arch="m64"/>
 
       <prerequisite name="piglit-cpu-test" hardware="fastgpu" arch="m64"/>
       <prerequisite only_for_type="daily" name="piglit-cpu-test" hardware="fastgpu" arch="m32"/>
