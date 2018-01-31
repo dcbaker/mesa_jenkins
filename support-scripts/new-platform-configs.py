@@ -51,9 +51,24 @@ def write_test_configs(platform: str, git_add: bool) -> None:
             subprocess.run(['git', 'add', path], check=True)
 
 
+def write_deqp_expectations(platform: str, git_add: bool) -> None:
+    files = ['gles31_unstable_tests.txt', 'egl_unstable_tests.txt',
+             'gles2_unstable_tests.txt', 'gles3_unstable_tests.txt']
+    root = os.path.join('deqp-test', f'{platform}_expectations')
+    os.mkdir(root)
+
+    for file_ in files:
+        path = os.path.join(root, file_)
+        with open(path, 'w') as f:
+            f.write('')
+        if git_add:
+            subprocess.run(['git', 'add', path], check=True)
+
+
 def main():
     args = arg_parser()
     write_test_configs(args.platform, not args.no_commit)
+    write_deqp_expectations(args.platform, not args.no_commit)
     if not args.no_commit:
         subprocess.run([
             'git', 'commit', '-m',
