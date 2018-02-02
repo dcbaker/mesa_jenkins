@@ -65,10 +65,23 @@ def write_deqp_expectations(platform: str, git_add: bool) -> None:
             subprocess.run(['git', 'add', path], check=True)
 
 
+def write_vk_expectations(platform: str, git_add: bool) -> None:
+    root = os.path.join('vulkancts-test', f'{platform}_expectations')
+    os.mkdir(root)
+
+    path = os.path.join(root, 'vk_unstable_tests.txt')
+    with open(path, 'w') as f:
+        f.write('')
+    if git_add:
+        subprocess.run(['git', 'add', path], check=True)
+
+
+
 def main():
     args = arg_parser()
     write_test_configs(args.platform, not args.no_commit)
     write_deqp_expectations(args.platform, not args.no_commit)
+    write_vk_expectations(args.platform, not args.no_commit)
     if not args.no_commit:
         subprocess.run([
             'git', 'commit', '-m',
