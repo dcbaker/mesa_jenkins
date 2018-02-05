@@ -8,8 +8,9 @@ sys.path.append(path.join(path.dirname(path.abspath(sys.argv[0])), "..", "repos"
 import build_support as bs
 
 class NoTest(bs.AutoBuilder):
-    def __init__(self, configure_options):
+    def __init__(self, o, configure_options):
         bs.AutoBuilder.__init__(self,
+                                o,
                                 configure_options=configure_options,
                                 install=False,
                                 export=False)
@@ -19,7 +20,16 @@ class NoTest(bs.AutoBuilder):
         pass
     
 def main():
+    pm = bs.ProjectMap()
+    sd = pm.project_source_dir(pm.current_project())
+    with open(os.path.join(sd, 'VERSION'), 'r') as f:
+        ver = f.read().strip().split('-devel')[0].split('.')
+    ver = [int(v) for v in ver]
+
     global_opts = bs.Options()
+
+    if ver >= [18, 1, 0]:
+        global_opts.env += ' LLVM_CONFIG=/usr/bin/llvm-config-4.0'
 
     options = []
     if global_opts.arch == "m32":
@@ -39,7 +49,7 @@ def main():
         options.append('--enable-debug')
 
     # builder = bs.AutoBuilder(configure_options=options, export=False)
-    builder = NoTest(configure_options=options)
+    builder = NoTest(global_opts, options)
 
     save_dir = os.getcwd()
     try:
