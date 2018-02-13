@@ -32,17 +32,12 @@ def main():
     b = bs.builders.MesonBuilder(extra_definitions=options, install=False)
 
     b.tests += [
-        # TODO: These need runtime discovery, probably using `find` or to point
-        # at the DSOs in the install directory
-        #
-        #'es1-ABI-check',
-        #'es2-ABI-check',
-        #'gbm-symbols-check',
-        #'wayland-egl-symbols-check',
-        #'wayland-egl-abi-check',
-        #'egl-symbols-check',
-        #'egl-entrypoint-check',
-
+        'es1-ABI-check',
+        'es2-ABI-check',
+        'gbm-symbols-check',
+        'wayland-egl-symbols-check',
+        'wayland-egl-abi-check',
+        'egl-symbols-check',
         'anv_block_pool_no_free',
         'anv_state_pool',
         'anv_state_pool_free_list_only',
