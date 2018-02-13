@@ -53,6 +53,10 @@
       <prerequisite name="drm"/>
     </project>
 
+    <project name="meson-clang-buildtest" src_dir="mesa">
+      <prerequisite name="drm"/>
+    </project>
+
     <project name="waffle"/>
 
     <!-- test projects should specify bisect_hardware and bisect_arch,
