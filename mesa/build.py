@@ -58,14 +58,25 @@ class MesaBuilder(bs.AutoBuilder):
 
 def meson_build():
     global_opts = bs.Options()
+    pm = bs.ProjectMap()
+    sd = pm.project_source_dir(pm.current_project())
 
     options = [
         '-Dgallium-drivers=',
         '-Ddri-drivers=i965,i915',
         '-Dvulkan-drivers=intel',
         '-Dplatforms=x11,drm',
-        '-Dgallium-omx=disabled',
     ]
+    # For a few days durring the commit cyle the 'auto' option was removed from
+    # omx and it defaulted to tizonia. during that time we need this to set the
+    # -Dgallium-omx=disabled. This can be removed after we're sure we don't
+    # need to bisect across that.
+    with open(os.path.join(sd, 'meson_options.txt')) as f:
+        for l in f:
+            if 'tizonia' in l:
+                options.append('-Dgallium-omx=disabled')
+                break
+
     if global_opts.config != 'debug':
         options.extend(['-Dbuildtype=release', '-Db_ndebug=true'])
     b = bs.builders.MesonBuilder(extra_definitions=options, install=True)

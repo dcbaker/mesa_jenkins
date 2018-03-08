@@ -19,7 +19,6 @@ def main():
     options = [
         '-Dbuild-tests=true',
         '-Dgallium-drivers=r300,r600,radeonsi,nouveau,swrast,swr,freedreno,vc4,pl111,etnaviv,imx,svga,virgl',
-        '-Dgallium-omx=bellagio',
         '-Dgallium-vdpau=true',
         '-Dgallium-xvmc=true',
         '-Dgallium-xa=true',
@@ -27,6 +26,16 @@ def main():
         '-Dgallium-nine=true',
         '-Dgallium-opencl=standalone',
     ]
+
+    # the knob for omx changed durring the 18.1 cycle, if tizonia support is
+    # present we need to use bellagio, otherwise we need true.
+    with open(os.path.join(sd, 'meson_options.txt')) as f:
+        for l in f:
+            if 'tizonia' in l:
+                options.append('-Dgallium-omx=bellagio')
+                break
+        else:
+            options.append('-Dgallium-omx=true')
     if global_opts.config != 'debug':
         options.extend(['-Dbuildtype=release', '-Db_ndebug=true'])
     b = bs.builders.MesonBuilder(extra_definitions=options, install=False)
