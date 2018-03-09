@@ -14,7 +14,8 @@
         "otc-gfxtest-glk-06.local": {"switch": 2, "outlet": 3},
         "otc-gfxtest-glk-04.local": {"switch": 2, "outlet": 4},
         "otc-gfxtest-glk-05.local": {"switch": 2, "outlet": 5},
-        "otc-gfxtest-cnlgt05-01.local": {"switch": 2, "outlet": 6}
+        "otc-gfxtest-cnlgt05-01.local": {"switch": 2, "outlet": 6},
+        "otc-gfxtest-cnlgt05-02.local": {"switch": 2, "outlet": 7}
     },
     "switches": {
         "1": {
